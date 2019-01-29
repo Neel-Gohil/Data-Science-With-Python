@@ -166,7 +166,7 @@ plt.pyplot.title("horsepower bins")
 dummy_variable_1 = pd.get_dummies(df["fuel-type"])
 #print(dummy_variable_1.head())
 
-dummy_variable_1.rename(columns={'fuel-type-gass':'gas', 'fuel-type-diesel':'diesel'}, inplace=True)
+dummy_variable_1.rename(columns={'fuel-type-diesel':'gas', 'fuel-type-diesel':'diesel'}, inplace=True)
 #print(dummy_variable_1.head())
 
 # merge data frame "df" and "dummy_variable_1"

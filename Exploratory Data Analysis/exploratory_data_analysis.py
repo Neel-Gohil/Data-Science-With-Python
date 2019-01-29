@@ -165,4 +165,31 @@ grouped_test3= df_gptest[['drive-wheels','price']].groupby(['drive-wheels'])
 print(grouped_test3.head(2))
 
 #obtain the values of the method group using the method "get_group"
-grouped_test2.get_group('4wd')['price']
+print(grouped_test3.get_group('4wd')['price'])
+
+#use the function 'f_oneway' in the module 'stats' to obtain the F-test score and P-value.
+
+f_val, p_val = stats.f_oneway(grouped_test3.get_group('fwd')['price'], grouped_test3.get_group('rwd')['price'],
+                              grouped_test3.get_group('4wd')['price'])
+
+print("ANOVA results: F=", f_val, ", P =", p_val)
+
+#Gives us great results stating price is correlated with drive wheels
+
+
+'''We now have a better idea of what our data looks like and which variables are important to take into account when predicting the car price. We have narrowed it down to the following variables:
+
+Continuous numerical variables:
+
+Length
+Width
+Curb-weight
+Engine-size
+Horsepower
+City-mpg
+Highway-mpg
+Wheel-base
+Bore
+Categorical variables:
+
+Drive-wheels'''
