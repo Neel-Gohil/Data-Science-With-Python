@@ -5,6 +5,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 import seaborn as sns
 
 # Import Data
@@ -138,3 +143,87 @@ print(p)
 
 PlotPolly(p,x,y, 'highway-mpg')
 #Plot has more overlaps
+
+#Create 11th order polynomial model for giggles
+f1 = np.polyfit(x,y,11)
+p1 = np.poly1d(f1)
+print(p1)
+
+PlotPolly(p1, x, y, 'Highway-mpg')
+
+#Polynomial Transformation
+
+pr=PolynomialFeatures(degree=2)
+pr
+
+Z_pr=pr.fit_transform(Z)
+print(Z_pr.shape)
+# Before transformation, there were 201 samples with 4 features while after transformation has 15 features
+
+''' Pipeline '''
+
+Input=[('scale',StandardScaler()),('polynomial', PolynomialFeatures(include_bias=False)),('model',LinearRegression())]
+
+pipe=Pipeline(Input)
+print(pipe)
+
+pipe.fit(Z,y)
+
+ypipe=pipe.predict(Z)
+print(ypipe[0:4])
+
+'''Measures for In-Sample Evaluation'''
+
+#Model 1: Simple Linear Regression
+
+#highway_mpg_fit
+
+print(lm.fit(X, Y))
+# Find the R^2
+print(lm.score(X, Y))
+#49.659% of the variation of the price is explained by this simple linear model
+
+#Calculate Mean Square Error which is to see the difference between actual y value versus the predicted y value
+
+Yhat=lm.predict(X)
+print(Yhat[0:4])
+
+#mean_squared_error(Y_true, Y_predict)
+print(mean_squared_error(df['price'], Yhat))
+
+
+#Model 2 multiple linear regression
+
+# fit the model
+lm.fit(Z, df['price'])
+# Find the R^2
+print(lm.score(Z, df['price']))
+#80.896 % of the variation of price is explained by this multiple linear regression
+
+#calculate Means Squared Error
+
+Y_predict_multifit = lm.predict(Z)
+mean_squared_error(df['price'], Y_predict_multifit)
+
+#Model 3: Polynomial Fit
+r_squared = r2_score(y, p(x))
+print(r_squared)
+#67.419 % of the variation of price is explained by this polynomial fit
+
+print(mean_squared_error(df['price'], p(x)))
+
+''' Prediction and Decision Making '''
+
+new_input=np.arange(1,100,1).reshape(-1,1)
+
+#fit the model
+lm.fit(X, Y)
+lm
+
+#create prediciton
+yhat=lm.predict(new_input)
+yhat[0:5]
+
+#plot data
+plt.plot(new_input,yhat)
+plt.show()
