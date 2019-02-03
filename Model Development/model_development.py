@@ -227,3 +227,4 @@ yhat[0:5]
 #plot data
 plt.plot(new_input,yhat)
 plt.show()
+
